@@ -9,6 +9,7 @@ const handleDomo = (e, onDomoAdded) => {
     helper.hideError();
 
     const name = e.target.querySelector('#domoName').value;
+    const size = e.target.querySelector('#domoSize').value;
     const age = e.target.querySelector('#domoAge').value;
 
     if (!name || !age) {
@@ -16,7 +17,7 @@ const handleDomo = (e, onDomoAdded) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age}, onDomoAdded);
+    helper.sendPost(e.target.action, {name, size, age}, onDomoAdded);
     return false;
 }
 
@@ -31,6 +32,8 @@ const DomoForm = (props) => {
         >
             <label htmlFor="name">Name: </label>
             <input id="domoName" type="text" name="name" placeholder="Domo Name" />
+            <label htmlFor="size">Size: </label>
+            <input id="domoSize" type="number" min="0" name="size" />
             <label htmlFor="age">Age: </label>
             <input id="domoAge" type="number" min="0" name="age" />
             <input className="makeDomoSubmit" type="submit" value="Make Domo" />
@@ -63,7 +66,9 @@ const DomoList = (props) => {
             <div key={domo.id} className="domo">
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
                 <h3 className="domoName">Name: {domo.name}</h3>
+                <h3 className="domoSize">Size: {domo.size}</h3>
                 <h3 className="domoAge">Age: {domo.age}</h3>
+                <input className="deleteDomo" type="submit" value="Delete Domo" />
             </div>
         );
     });
