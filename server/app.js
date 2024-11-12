@@ -1,6 +1,6 @@
 // DOMO C
 require('dotenv').config();
-//end
+// end
 // Part 1 for Mongo
 const path = require('path');
 const express = require('express');
@@ -12,11 +12,11 @@ const expressHandlebars = require('express-handlebars');
 const helmet = require('helmet');
 // DOMO B
 const session = require('express-session');
-//end
+// end
 // DOMO C
 const RedisStore = require('connect-redis').default;
 const redis = require('redis');
-//end
+// end
 
 const router = require('./router.js');
 
@@ -35,7 +35,7 @@ const redisClient = redis.createClient({
   url: process.env.REDISCLOUD_URL,
 });
 
-redisClient.on('error', err => console.log('Redis Client Error', err));
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
 
 redisClient.connect().then(() => {
   const app = express();
@@ -47,19 +47,19 @@ redisClient.connect().then(() => {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
-  //DOMO B
+  // DOMO B
   app.use(session({
     key: 'sessionid',
     // DOMO C
     store: new RedisStore({
       client: redisClient,
     }),
-    //end
+    // end
     secret: 'Domo Arigato',
     resave: false,
     saveUninitialized: false,
   }));
-  //end
+  // end
 
   app.engine('handlebars', expressHandlebars.engine({ defaultLayout: '' }));
   app.set('view engine', 'handlebars');
@@ -72,4 +72,4 @@ redisClient.connect().then(() => {
     console.log(`Listening on port ${port}`);
   });
 });
-//end
+// end
