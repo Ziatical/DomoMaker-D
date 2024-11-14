@@ -1,6 +1,7 @@
 //Domo D
 const helper = require('./helper.js');
 const React = require('react');
+import DomoModal from './../server/modals/DomoModal.jsx';
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
 
@@ -43,6 +44,8 @@ const DomoForm = (props) => {
 
 const DomoList = (props) => {
     const [domos, setDomos] = useState(props.domos);
+    const [selectedDomo, setSelectedDomo] = useState(null);  // Track the selected Domo
+    const [showModal, setShowModal] = useState(false);  // Track if modal is visible
 
     useEffect(() => {
         const loadDomosFromServer = async () => {
@@ -52,6 +55,16 @@ const DomoList = (props) => {
         };
         loadDomosFromServer();
     }, [props.reloadDomos]);
+
+    const openDomo = (domo) => {
+        setSelectedDomo(domo); // Set the selected Domo
+        setShowModal(true); // Show the modal
+    };
+
+    const closeModal = () => {
+        setShowModal(false); // Close the modal
+        setSelectedDomo(null); // Reset selected Domo
+    };
 
     if (domos.length === 0) {
         return (
@@ -68,7 +81,7 @@ const DomoList = (props) => {
                 <h3 className="domoName">Name: {domo.name}</h3>
                 <h3 className="domoSize">Size: {domo.size}</h3>
                 <h3 className="domoAge">Age: {domo.age}</h3>
-                <input className="deleteDomo" type="submit" value="Delete Domo" />
+                <button className="openDomo" onClick={() => openDomo(domo)}>Open Domo</button>
             </div>
         );
     });
@@ -76,6 +89,7 @@ const DomoList = (props) => {
     return (
         <div className="domoList">
             {domoNodes}
+            <DomoModal show={showModal} domo={selectedDomo} onClose={closeModal} />
         </div>
     );
 };
